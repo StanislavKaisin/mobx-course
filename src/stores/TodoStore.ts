@@ -1,4 +1,10 @@
-import { action, makeObservable, observable } from "mobx";
+import {
+  action,
+  computed,
+  makeAutoObservable,
+  makeObservable,
+  observable,
+} from "mobx";
 
 export interface ITodo {
   id: number;
@@ -9,11 +15,17 @@ export interface ITodo {
 class TodoStore {
   list: ITodo[] = [];
   constructor() {
-    makeObservable(this, {
-      list: observable,
-      add: action,
-      toggle: action,
-      remove: action,
+    // makeObservable(this, {
+    //   list: observable,
+    //   add: action,
+    //   toggle: action,
+    //   remove: action,
+    // });
+    makeAutoObservable(this, {
+      //not an action
+      // add: false,
+      //redefine function type
+      // add: computed,
     });
   }
   add(title: string) {
