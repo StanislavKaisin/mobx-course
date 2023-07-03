@@ -1,8 +1,11 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import TodoStore from "../../stores/TodoStore";
 import styles from "./TodoInput.module.css";
+import { useStore } from "../../stores";
 
-export const TodoInput = ({ todos }: { todos: TodoStore }) => {
+// export const TodoInput = ({ todos }: { todos: TodoStore }) => {
+export const TodoInput = () => {
+  const { todos } = useStore();
   // const [newTodo, setNewTodo] = useState("");
   // const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   setNewTodo(e.target.value);

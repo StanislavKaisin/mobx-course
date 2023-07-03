@@ -2,8 +2,12 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import TodoStore, { ITodo } from "../../stores/TodoStore";
 import styles from "./TodoList.module.css";
+import { useStore } from "../../stores";
 
-const TodoList = ({ todos }: { todos: TodoStore }) => {
+// const TodoList = ({ todos }: { todos: TodoStore }) => {
+const TodoList = () => {
+  const { todos } = useStore();
+
   const handleToggleTodo = (todo: ITodo) => () => {
     todos.toggle(todo);
   };

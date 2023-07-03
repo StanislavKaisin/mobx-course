@@ -11,8 +11,8 @@ const todos = new TodoStore();
 function App() {
   return (
     <div className="App">
-      <TodoInput todos={todos} />
-      <TodoList todos={todos} />
+      <TodoInput />
+      <TodoList />
     </div>
   );
 }
