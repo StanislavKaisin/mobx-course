@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import TodoStore from "./TodoStore";
 
 const store = {
-  todos: new TodoStore(),
+  todos: TodoStore(),
 };
 
 export const StoreContext = createContext(store);
