@@ -6,7 +6,7 @@ import { TodoInput } from "./Todo/TodoInput/TodoInput";
 
 import TodoStore from "./stores/TodoStore";
 import TodoList from "./Todo/TodoList/TodoList";
-import { observable } from "mobx";
+import { action, observable, runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 
 const todos = TodoStore();
@@ -14,9 +14,36 @@ const todos = TodoStore();
 function App() {
   const appUI = useLocalObservable(() => {
     return {
+      loading: false,
       todosVisible: true,
+      receiveData() {
+        this.loading = false;
+        this.todosVisible = !this.todosVisible;
+      },
       toggleTodoVisibility() {
-        appUI.todosVisible = !appUI.todosVisible;
+        this.loading = true;
+        new Promise((resolve) => {
+          setTimeout(() => {
+            return resolve(void 0);
+          }, 1000);
+        }).then(
+          // first case
+          // action(() => {
+          //   this.loading = false;
+          //   this.todosVisible = !this.todosVisible;
+          // })
+
+          // second case
+          // () => {
+          //   runInAction(() => {
+          //     this.loading = false;
+          //     this.todosVisible = !this.todosVisible;
+          //   });
+          // }
+
+          // third case
+          this.receiveData
+        );
       },
     };
   });
@@ -33,6 +60,7 @@ function App() {
     <div className="App">
       <TodoInput />
       <div className={styles["todo-list-wrapper"]}>
+        {String(appUI.loading)}
         <h2 onClick={appUI.toggleTodoVisibility}>
           <span>{appUI.todosVisible ? "-" : "+"}</span>
           Todos
