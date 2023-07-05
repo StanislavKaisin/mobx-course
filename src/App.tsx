@@ -20,30 +20,17 @@ function App() {
         this.loading = false;
         this.todosVisible = !this.todosVisible;
       },
-      toggleTodoVisibility() {
+      async toggleTodoVisibility() {
         this.loading = true;
-        new Promise((resolve) => {
+        await new Promise((resolve) => {
           setTimeout(() => {
             return resolve(void 0);
           }, 1000);
-        }).then(
-          // first case
-          // action(() => {
-          //   this.loading = false;
-          //   this.todosVisible = !this.todosVisible;
-          // })
-
-          // second case
-          // () => {
-          //   runInAction(() => {
-          //     this.loading = false;
-          //     this.todosVisible = !this.todosVisible;
-          //   });
-          // }
-
-          // third case
-          this.receiveData
-        );
+        });
+        runInAction(() => {
+          this.loading = false;
+          this.todosVisible = !this.todosVisible;
+        });
       },
     };
   });
