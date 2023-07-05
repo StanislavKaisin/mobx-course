@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./App.module.css";
 
 import "./App.css";
@@ -20,9 +20,9 @@ function App() {
         this.loading = false;
         this.todosVisible = !this.todosVisible;
       },
-      async toggleTodoVisibility() {
+      *toggleTodoVisibility() {
         this.loading = true;
-        await new Promise((resolve) => {
+        yield new Promise((resolve) => {
           setTimeout(() => {
             return resolve(void 0);
           }, 1000);
@@ -37,12 +37,16 @@ function App() {
   // const handleClick = () => {
   //   appUI.toggleTodoVisibility();
   // };
-  const todosVisible = observable.box(true);
+  // const todosVisible = observable.box(true);
   //@ts-ignore
-  todosVisible.observe_((newValue) => {
-    console.log("newValue :>> ", newValue);
-  });
-  todosVisible.set(false);
+  // todosVisible.observe_((newValue) => {
+  //   console.log("newValue :>> ", newValue);
+  // });
+  // todosVisible.set(false);
+  useEffect(() => {
+    console.log({ loading: appUI.loading });
+  }, [appUI.loading]);
+
   return (
     <div className="App">
       <TodoInput />
