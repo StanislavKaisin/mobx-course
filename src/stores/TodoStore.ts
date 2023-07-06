@@ -25,6 +25,9 @@ const TodoStore = () => {
     remove(id: number) {
       this.list = this.list.filter((item) => item.id !== id);
     },
+    get unfinishedTodos() {
+      return this.list.filter((todo: ITodo) => !todo.isDone);
+    },
   });
 };
 

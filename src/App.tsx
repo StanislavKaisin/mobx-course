@@ -6,12 +6,28 @@ import { TodoInput } from "./Todo/TodoInput/TodoInput";
 
 import TodoStore from "./stores/TodoStore";
 import TodoList from "./Todo/TodoList/TodoList";
-import { action, observable, runInAction } from "mobx";
+import { action, autorun, observable, runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-
-const todos = TodoStore();
+import { useStore } from "./stores";
 
 function App() {
+  const { todos } = useStore();
+  useEffect(() => {
+    const disposedAutorun = autorun(
+      () => {
+        console.log("todos.list :>> ", todos.list);
+        throw new Error("custom error");
+      },
+      {
+        delay: 1000,
+        onError: (error) => console.log("error.message :>> ", error.message),
+      }
+    );
+    return () => {
+      disposedAutorun();
+    };
+  }, []);
+
   const appUI = useLocalObservable(() => {
     return {
       loading: false,
@@ -20,32 +36,11 @@ function App() {
         this.loading = false;
         this.todosVisible = !this.todosVisible;
       },
-      *toggleTodoVisibility() {
-        this.loading = true;
-        yield new Promise((resolve) => {
-          setTimeout(() => {
-            return resolve(void 0);
-          }, 1000);
-        });
-        runInAction(() => {
-          this.loading = false;
-          this.todosVisible = !this.todosVisible;
-        });
+      toggleTodoVisibility() {
+        this.todosVisible = !this.todosVisible;
       },
     };
   });
-  // const handleClick = () => {
-  //   appUI.toggleTodoVisibility();
-  // };
-  // const todosVisible = observable.box(true);
-  //@ts-ignore
-  // todosVisible.observe_((newValue) => {
-  //   console.log("newValue :>> ", newValue);
-  // });
-  // todosVisible.set(false);
-  useEffect(() => {
-    console.log({ loading: appUI.loading });
-  }, [appUI.loading]);
 
   return (
     <div className="App">
@@ -54,7 +49,7 @@ function App() {
         {String(appUI.loading)}
         <h2 onClick={appUI.toggleTodoVisibility}>
           <span>{appUI.todosVisible ? "-" : "+"}</span>
-          Todos
+          Todos (unfinished {todos.unfinishedTodos.length})
         </h2>
         {appUI.todosVisible && <TodoList />}
       </div>
