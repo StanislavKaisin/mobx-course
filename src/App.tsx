@@ -6,63 +6,25 @@ import { TodoInput } from "./Todo/TodoInput/TodoInput";
 
 import TodoStore from "./stores/TodoStore";
 import TodoList from "./Todo/TodoList/TodoList";
-import { action, autorun, observable, reaction, runInAction, when } from "mobx";
+import {
+  action,
+  autorun,
+  observable,
+  reaction,
+  runInAction,
+  toJS,
+  when,
+} from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useStore } from "./stores";
+import store, { useStore } from "./stores";
 
-function App() {
-  const { todos } = useStore();
-  // useEffect(() => {
-  //   const disposedAutorun = autorun(
-  //     () => {
-  //       console.log("todos.list :>> ", todos.list);
-  //       throw new Error("custom error");
-  //     },
-  //     {
-  //       delay: 1000,
-  //       onError: (error) => console.log("error.message :>> ", error.message),
-  //     }
-  //   );
-  //   return () => {
-  //     disposedAutorun();
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const disposedReaction = reaction(
-  //     () => {
-  //       return { length: todos.list.length, unfinished: todos.unfinishedTodos };
-  //     },
-  //     // ({ length, unfinished }) => {
-  //     //   console.log("length :>> ", length);
-  //     //   console.log("unfinished :>> ", unfinished);
-  //     //   throw new Error("custom error");
-  //     // },
-  //     (newValue, oldValue) => {
-  //       console.log("newValue :>> ", newValue);
-  //       console.log("oldValue :>> ", oldValue);
-  //       throw new Error("custom error");
-  //     },
-  //     { delay: 1000, onError: (err) => console.log(err) }
-  //   );
-  //   return () => {
-  //     disposedReaction();
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const disposeWhen = when(
-  //     () => {
-  //       return !appUI.todosVisible;
-  //     },
-  //     () => {
-  //       console.log("clean up");
-  //     }
-  //   );
-  //   return () => {
-  //     disposeWhen();
-  //   };
-  // }, []);
+// const App = ({ todos }: { todos: typeof store.todos }) => {
+const App = observer(({ todos }: { todos: ReturnType<typeof TodoStore> }) => {
+  //ways to log
+  // console.log("todos.list :>> ", todos.list);
+  // console.log("todos.list :>> ", [...todos.list]);
+  // console.log("todos.list :>> ", JSON.parse(JSON.stringify(todos.list)));
+  console.log("todos.list :>> ", toJS(todos.list));
 
   useEffect(() => {
     const promiseWhen = when(() => {
@@ -100,6 +62,14 @@ function App() {
       </div>
     </div>
   );
-}
+});
 
-export default observer(App);
+const AppWrapper = () => {
+  const { todos } = useStore();
+
+  return <App todos={todos} />;
+};
+
+export { App };
+
+export default AppWrapper;
