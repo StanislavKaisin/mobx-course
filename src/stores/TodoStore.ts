@@ -4,6 +4,7 @@ import {
   makeAutoObservable,
   makeObservable,
   observable,
+  trace,
 } from "mobx";
 
 export interface ITodo {
@@ -26,6 +27,10 @@ const TodoStore = () => {
       this.list = this.list.filter((item) => item.id !== id);
     },
     get unfinishedTodos() {
+      // trace();
+      //pass true to open debugger
+      // trace(true);
+
       return this.list.filter((todo: ITodo) => !todo.isDone);
     },
   });

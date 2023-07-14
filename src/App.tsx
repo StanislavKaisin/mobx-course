@@ -13,6 +13,7 @@ import {
   reaction,
   runInAction,
   toJS,
+  trace,
   when,
 } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -24,7 +25,8 @@ const App = observer(({ todos }: { todos: ReturnType<typeof TodoStore> }) => {
   // console.log("todos.list :>> ", todos.list);
   // console.log("todos.list :>> ", [...todos.list]);
   // console.log("todos.list :>> ", JSON.parse(JSON.stringify(todos.list)));
-  console.log("todos.list :>> ", toJS(todos.list));
+  // console.log("todos.list :>> ", toJS(todos.list));
+  trace();
 
   useEffect(() => {
     const promiseWhen = when(() => {
